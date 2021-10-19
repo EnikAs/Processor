@@ -1,7 +1,7 @@
 #include "assembler.h"
 
-FILE* calc_file = fopen("calc.txt", "r");// a >> w 
-FILE* assembler_file = fopen("assembler.jopa", "wb");// a >> w 
+FILE* calc_file = fopen("calc.txt", "r");
+FILE* assembler_file = fopen("assembler.jopa", "wb");
 
 int print_all_commands (FILE* file_stream)
 {
@@ -20,15 +20,17 @@ int print_all_commands (FILE* file_stream)
     {
         if (buf.buffer[i] == ';' && buf.buffer[i])
         {
-            buf.buffer[i] = '\0';       
+            buf.buffer[i] = '\0';
         }
     }
 
+    StackPush(&proc_stack, buf.tmp_string_cunt);
+
     for (int i = 0 ; i < buf.tmp_string_cunt ; i++)
-    {   
+    {
         push_one_command(com[i], &proc_stack);
     }
-    //printf("%d", proc_stack.size_of_stack);
+
     fwrite(proc_stack.data, sizeof(elem_t), proc_stack.size_of_stack, assembler_file);
     fclose(assembler_file);
     
@@ -218,7 +220,7 @@ int push_one_command (Commands com, Stack* proc_stack)
                     case_aff(com, proc_stack);        
                     break;
         case INCORRECT_INPUT:
-                    printf(" \nGOVNO (INCORRECT INPUT!!!) \n");
+                    StackPush(proc_stack, INCORRECT_INPUT);
                     break;                   
     }
     return 0;

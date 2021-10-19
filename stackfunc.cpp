@@ -21,7 +21,7 @@ void data_ptr_fix (Stack* stk, int key)
     }
 }
 
- int StackCtor (Stack* stk, int capacity)
+int StackCtor (Stack* stk, int capacity)
 {
     if (stk->data == NULL)
     {
@@ -61,12 +61,12 @@ int StackReSize (Stack* stk, float multiple_const)
     $murmurhash_for_stack(stk, CHECK);
 
     stk->capacity = stk->capacity * multiple_const;
-    printf("stk->capacity = %d\n", stk->capacity);
+    //printf("stk->capacity = %d\n", stk->capacity);
     
     data_ptr_fix(stk, MINUS);   
     
-    printf("stk->data ptr = %d\n", &stk->data);
-    printf("size for realloc = %d\n", (sizeof(elem_t) * stk->capacity + 2 * sizeof(uint64_t)) );
+    //printf("stk->data ptr = %d\n", &stk->data);
+    //printf("size for realloc = %d\n", (sizeof(elem_t) * stk->capacity + 2 * sizeof(uint64_t)) );
     stk->data = (elem_t*) realloc(stk->data, (sizeof(elem_t) * stk->capacity + 2 * sizeof(uint64_t)) );
     if ( stk->data == NULL)
     {
@@ -95,7 +95,7 @@ int StackPush (Stack* stk, elem_t value)
     
     if (stk->size_of_stack + 1 >= stk->capacity)
     {
-        printf("\nResize is necessary\n");
+        //printf("\nResize is necessary\n");
         StackReSize(stk, CONST_FOR_MR_DANIIL);
 
         $StackOKCheck(stk);
@@ -288,8 +288,8 @@ void StackDump (Stack* stk, const int str_num, const char* func_name, const char
         $printf("stk = NULL!!!");
     }
 
+    StackDtor(stk);
     assert(ERROR && "Check log file");
-
 }
 
 int StackOKCheck (Stack* stk)

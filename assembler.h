@@ -13,7 +13,7 @@
 typedef int elem_t;
 
 //extern FILE* assembler_file;
-extern FILE* calc_file;// a >> w 
+//extern FILE* calc_file;// a >> w 
 
 enum end_of_file
 {

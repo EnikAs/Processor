@@ -1,6 +1,7 @@
 #include "stackfunc.h"
 //#include "processor.h"
 #include "assembler.h"
+#include "disassembler.h"
 
 extern FILE* calc_file;
 extern FILE* assembler_file;
@@ -13,18 +14,19 @@ int main()
     
     print_all_commands(calc_file);
     
-    
-    //for(int i = 0 ; i < 17 ; i++)
-    //    StackPush(&stk, 123);
-    
-    //$StackDump(&stk);
     assembler_file = fopen("assembler.jopa", "rb");
-    elem_t mas[40] = {};
-    fread(mas, sizeof(elem_t), 25, assembler_file);
-    for (int i = 0 ; i < 25 ; i ++)
-        printf("%d\n", mas[i]);
+    if (assembler_file == NULL)
+        printf("INPUT ERROR!!! (ASSEMBER FILE = NULL)");
     
-    struct stat for_read; 
+    int correct_check = -1;
+/*
+    correct_check = do_all_commands(assembler_file, &stk);
 
+    if (correct_check == INCORRECT_INPUT)
+        assert(ERROR && "I WILL DELETE YOUR SYSTEM NEXT TIME!)))");
+
+    $StackDump(&stk);
+*/
+    dis_all_commands(assembler_file);
     return 0;
 }

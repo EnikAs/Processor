@@ -1,7 +1,7 @@
-
-#include "processor.h"
+#include "disassembler.h"
 
 FILE* input_file = fopen("assembler.txt", "rb");
+FILE* output_file = fopen("disasm.txt", "w");
 
 int get_file_stat (FILE* input_file)
 {
@@ -57,63 +57,67 @@ int init_one_command (com_buff* buf)
     }
 }
 
-int do_one_command (com_buff* buf, Stack* stk)
+int dis_one_command (com_buff* buf)
 {
+    if (output_file == NULL)
+        printf("OUTPUT FILE ERROR!!");
+
     int command = init_one_command(buf);
     buf->tmp_elem += 1;
     if (command == PUSH)
     {
-        StackPush(stk, buf->data[buf->tmp_elem]);
+        fprintf(output_file, "push %d\n", buf->data[buf->tmp_elem]);
         buf->tmp_elem += 1;                                 // передвигаем tmp_elem, чтобы перейти через значение для пуша
     }
 
     if (command == POP)
     {
-        StackPop(stk);
+        fprintf(output_file, "pop\n");
     }
 
     if (command == MUL)
     {
-        StackPush(stk, StackPop(stk) * StackPop(stk));
+        fprintf(output_file, "mul\n");
     }
 
     if (command == DIV)
     {
-        StackPush(stk, StackPop(stk) / StackPop(stk));
+        fprintf(output_file, "div\n");
     }
 
     if (command == SUB)
     {
-        StackPush(stk, StackPop(stk) - StackPop(stk));
+        fprintf(output_file, "sub\n");
     }
 
     if (command == AFF)
     {
-        StackPush(stk, StackPop(stk) + StackPop(stk));
+        fprintf(output_file, "aff\n");
     }
 
     if (command == OUT)
     {
-        StackDtor(stk);
+        fprintf(output_file, "out\n");
     }
 
     if (command == INCORRECT_INPUT)
     {
-        return INCORRECT_INPUT;
+        fprintf(output_file, "nevedomoe govno\n");
     }
     return CORRECT;
 
 }
 
-int do_all_commands (FILE* input_file, Stack* stk)
+int dis_all_commands (FILE* input_file)
 {
     com_buff* buf = get_commands_from_asm(input_file); 
     int correct_check = -1;
     for (int i = 0 ; i < buf->com_cunt ; i++)
     {
-        correct_check = do_one_command(buf, stk);
+        correct_check = dis_one_command(buf);
         if (correct_check == INCORRECT_INPUT)
             return INCORRECT_INPUT;
     }
     return CORRECT;
 }
+
