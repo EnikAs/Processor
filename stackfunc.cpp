@@ -289,7 +289,9 @@ void StackDump (Stack* stk, const int str_num, const char* func_name, const char
     }
 
     StackDtor(stk);
+    fclose(log_file);
     assert(ERROR && "Check log file");
+    
 }
 
 int StackOKCheck (Stack* stk)

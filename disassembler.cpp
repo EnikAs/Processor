@@ -1,3 +1,4 @@
+/*
 #include "disassembler.h"
 
 FILE* input_file = fopen("assembler.txt", "rb");
@@ -120,4 +121,5 @@ int dis_all_commands (FILE* input_file)
     }
     return CORRECT;
 }
+*/
 

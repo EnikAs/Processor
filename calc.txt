@@ -1,8 +1,8 @@
-push 10
-push 20
-push 30
-pop
-push 40
-mul
-aff
-push 50
+PUSH 10
+PUSH 20
+PUSH 30
+PUSH 40
+IN
+PUSH 50
+AFF
+IN

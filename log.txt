@@ -1,0 +1,27 @@
+
+In file main.cpp, in function main on line 27
+
+-------------------------------------
+
+Stack got some problems)))
+Error: CONGRATULATIONS ! (THERE ARE NO ERRORS !!!)
+Stack is destructed = false
+left canary = 1003514224580619570 | ptr = 6422248 --- OK !!!
+size = 6
+capacity = 10
+right canary = 1003514224580619570 | ptr = 6422288 --- OK !!!
+
+-----------------------
+
+left data canary = 1003514224580619570 | ptr = 855856  --- OK !!!
+data[0] = 10 | ptr = 855864
+data[1] = 20 | ptr = 855868
+data[2] = 30 | ptr = 855872
+data[3] = 40 | ptr = 855876
+data[4] = 126 | ptr = 855880
+data[5] = 65 | ptr = 855884
+data[6] = 0 | ptr = 855888
+data[7] = 0 | ptr = 855892
+data[8] = 0 | ptr = 855896
+data[9] = 0 | ptr = 855900
+right data canary = 1003514224580619570 | ptr = 855904 --- OK !!!

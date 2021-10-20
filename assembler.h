@@ -8,12 +8,24 @@
 #include <string.h>
 #include <stdlib.h>
 #include <cassert>
+
 #include "stackfunc.h"
+#include "commsenum.h"
+
+#undef DEF_CMD
+
+#define DEF_CMD(num, name, arg, ...)                                            \
+    else if (strcmp(com[*tmp_com].command, #name) == 0)                         \
+    {                                                                           \
+        StackPush(proc_stack, name);                                            \
+        if (arg > 0)                                                            \
+        {                                                                       \
+            *tmp_com += arg;                                                    \
+            StackPush(proc_stack, get_int_from_com(com[*tmp_com])) ;            \
+        }                                                                       \
+    }                                                                           \
 
 typedef int elem_t;
-
-//extern FILE* assembler_file;
-//extern FILE* calc_file;// a >> w 
 
 enum end_of_file
 {
@@ -27,23 +39,11 @@ struct Commands
     int lenght;
 };
 
-enum commands
-{
-    CTOR = 1,
-    PUSH,
-    POP,
-    MUL,
-    DIV,
-    SUB,
-    AFF,
-    OUT,
-    INCORRECT_INPUT
-};
-
 struct buffer 
 {
     char* buffer;
     int string_cunt = 0;
+    int words_cunt = 0;
     int tmp_string_cunt = 0;
     int buffer_size = 0;
     int tmp_pos = 0;
@@ -63,23 +63,7 @@ int          get_all_commands           (Commands* com, buffer* buf);
 
 int          get_one_command            (Commands* com, buffer* buf);
 
-int          type_of_command            (Commands com, Stack* proc_stack);
-
-void         case_push                  (Commands com, Stack* proc_stack);
-
-void         case_pop                   (Commands com, Stack* proc_stack);
-
-void         case_mul                   (Commands com, Stack* proc_stack);
-
-void         case_div                   (Commands com, Stack* proc_stack);
-
-void         case_aff                   (Commands com, Stack* proc_stack);
-
-void         case_sub                   (Commands com, Stack* proc_stack);
-
-void         case_out                   (Commands com, Stack* proc_stack);
-
-int          push_one_command          (Commands com, Stack* proc_stack);
+int          push_one_command           (Commands* com, Stack* proc_stack, int* tmp_com);
 
 Commands*    commands_init              (buffer* buf);
 

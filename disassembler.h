@@ -1,3 +1,4 @@
+/*
 #ifndef DISASSEMBLER_H_INCLUDED
 #define DISASSEMBLER_H_INCLUDED
 
@@ -12,6 +13,7 @@
 
 #include "stackfunc.h"
 #include "assembler.h"
+#include "commsenum.h"
 
 struct com_buff
 {
@@ -31,3 +33,4 @@ int dis_all_commands (FILE* input_file);
 int init_one_command (com_buff* buf);
 
 #endif 
+*/

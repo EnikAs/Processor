@@ -13,21 +13,7 @@
 
 #include "stackfunc.h"
 #include "assembler.h"
-
-/*
-enum commands
-{
-    CTOR = 1,
-    PUSH,
-    POP,
-    MUL,
-    DIV,
-    SUB,
-    AFF,
-    OUT,
-    INCORRECT_INPUT
-};
-*/
+#include "commsenum.h"
 
 struct com_buff
 {
@@ -38,7 +24,7 @@ struct com_buff
 
 int get_file_stat (FILE* input_file);
 
-com_buff* get_commands_from_asm (FILE* inputt_file);
+com_buff* get_commands_from_asm (FILE* inputt_file, com_buff* buf);
 
 int do_one_command (com_buff* buf, Stack* stk);
 
