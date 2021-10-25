@@ -12,18 +12,6 @@
 #include "stackfunc.h"
 #include "commsenum.h"
 
-#undef DEF_CMD
-
-#define DEF_CMD(num, name, arg, ...)                                            \
-    else if (strcmp(com[*tmp_com].command, #name) == 0)                         \
-    {                                                                           \
-        StackPush(proc_stack, name);                                            \
-        if (arg > 0)                                                            \
-        {                                                                       \
-            *tmp_com += arg;                                                    \
-            StackPush(proc_stack, get_int_from_com(com[*tmp_com])) ;            \
-        }                                                                       \
-    }                                                                           \
 
 typedef int elem_t;
 
@@ -37,6 +25,20 @@ struct Commands
 {
     char* command;
     int lenght;
+};
+
+struct char_mas
+{
+    char mas[1000] = {};
+    ip = 0;
+};
+
+struct Cmd
+{
+    unsigned ram : 1;
+    unsigned reg : 1;
+    unsigned konst : 1;
+    int cmd : 5;
 };
 
 struct buffer 

@@ -12,6 +12,7 @@ int print_all_commands (FILE* file_stream)
 
     Stack proc_stack = {};
     StackCtor(&proc_stack, 7);
+    char code[1000] = {};// TODO calloc на sizeof(typdef)*2*колличество строк
 
     buffer_init(buf, file_stream);
     Commands* com = commands_init(buf);
@@ -34,7 +35,6 @@ int print_all_commands (FILE* file_stream)
         push_one_command(com, &proc_stack, &tmp_com);
     }
 
-    //$StackDump(&proc_stack);
     fwrite(proc_stack.data, sizeof(elem_t), proc_stack.size_of_stack, assembler_file);
     
     fclose(calc_file);
@@ -144,23 +144,102 @@ elem_t get_int_from_com (Commands com)
     return tmp_int;
 }
 
-int push_one_command (Commands* com, Stack* proc_stack, int* tmp_com)
+#undef DEF_CMD
+
+#define DEF_CMD(num, name, arg, ...)                                            \
+    else if (strcmp(com[*tmp_com].command, #name) == 0)                         \
+    {                                                                           \
+        StackPush(proc_stack, name);                                            \
+        if (arg > 0)                                                            \
+        {                                                                       \
+            *tmp_com += arg;                                                    \
+            StackPush(proc_stack, get_int_from_com(com[*tmp_com])) ;            \
+        }                                                                       \
+    }                                                                           \
+
+
+int push_one_command (Commands* com, char_mas* array, int* tmp_com)
 {
+    Cmd bait = {};
+    int tmp_int = 0; 
+    char tmp_reg = NULL;
+    char skobka = NULL;
     if (0);
-
-    #include "commands.def"
-
-    else
-        StackPush(proc_stack, INCORRECT_INPUT);
-    
-    return 0;
-}
-    /*
+    //#include "commands.def"
     else if (strcmp(com[*tmp_com].command, "PUSH") == 0)
     {
-        StackPush(proc_stack, PUSH);
         *tmp_com += 1;
-        StackPush(proc_stack, get_int_from_com(com[*tmp_com]));
+        if (sscanf(com[*tmp_com].command, "[%d+%cx%c", &tmp_int, &tmp_reg, &skobka) == 3) // ввод в ОП с регистром, команда вида push [123+ax]
+        {
+            if (skobka == ']')
+            {
+            bait.ram = 1;
+            bait.reg = 1;
+            bait.konst = 1;
+            bait.cmd = PUSH;
+            }
+            else 
+                return INCORRECT_INPUT;
+                
+            *((char*)array->mas + array->ip) = bait;
+            array->ip += 1; // sizeof(bait)
+            *((char*)array->mas + array->ip) = tmp_reg - 'a';
+            array->ip += 1; // sizeof(tmp_reg)
+            *((char*)array->mas + array->ip) = tmp_int;
+            array->ip += 4;
+        }
+        else if (sscanf(com[*tmp_com].command, "[%cx%c", &tmp_reg, &skobka) == 2) // команда вида push [ax]
+        {
+            if (skobka == ']')
+            {
+            bait.ram = 1;
+            bait.reg = 1;
+            bait.cmd = PUSH;
+            }
+            else 
+                return INCORRECT_INPUT;
+
+            *((char*)array->mas + array->ip) = bait;
+            array->ip += 1; // sizeof(bait)
+            *((char*)array->mas + array->ip) = tmp_reg - 'a';
+            array->ip += 1; // sizeof(tmp_reg)
+        }    
+        else if (sscanf(com[*tmp_com].command, "[%d%c", &tmp_int, &skobka) == 2) // команда вида push [123]
+        {
+            if (skobka == ']')
+            {
+            bait.ram = 1;
+            bait.konst = 1;
+            bait.cmd = PUSH;
+            }
+            else 
+                return INCORRECT_INPUT;
+
+            *((char*)array->mas + array->ip) = bait;
+            array->ip += 1; // sizeof(bait)
+            *((char*)array->mas + array->ip) = tmp_int;
+            array->ip += 4;
+        }  
+        else if (sscanf(com[*tmp_com].command, "%cx", &tmp_reg) == 1) // просто регистр, команда вида push ax
+        {
+            bait.reg = 1;
+            bait.cmd = PUSH;
+
+            *((char*)array->mas + array->ip) = bait;
+            array->ip += 1; // sizeof(bait)
+            *((char*)array->mas + array->ip) = tmp_reg - 'a';
+            array->ip += 1; // sizeof(tmp_reg)
+        }   
+        else if(sscanf(com[*tmp_com].command, "%d", &tmp_int) == 1)// команда вида push 123
+        {
+            bait.konst = 1;
+            bait.cmd = PUSH;
+
+            *((char*)array->mas + array->ip) = bait;
+            array->ip += 1; // sizeof(bait)
+            *((char*)array->mas + array->ip) = tmp_int;
+            array->ip += 4;
+        }
     }
 
     else if (strcmp(com[*tmp_com].command, "MUL") == 0)
@@ -192,4 +271,12 @@ int push_one_command (Commands* com, Stack* proc_stack, int* tmp_com)
     {
         StackPush(proc_stack, AFF);
     }
+
+    else
+        StackPush(proc_stack, INCORRECT_INPUT);
+    
+    return 0;
+}
+    /*
+    
     */
